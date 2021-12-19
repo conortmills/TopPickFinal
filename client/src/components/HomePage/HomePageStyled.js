@@ -1,0 +1,21 @@
+import React from "react";
+import styled from "styled-components";
+import { NavLink } from "react-router-dom";
+
+export const CardWrapper = styled.div``;
+export const TotalCardContainer = styled.div``;
+export const Card = styled(NavLink)``;
+export const TopHalf = styled.div``;
+export const ImageBox = styled.div``;
+export const AvatarImage = styled.img``;
+export const UserInfoBox = styled.div``;
+export const UserHandle = styled.div``;
+export const UserDisplayName = styled.div``;
+export const BetTimeStamp = styled.div``;
+export const BottomHalf = styled.div``;
+export const BetDetailsBox = styled.div``;
+export const Matchup = styled.div``;
+export const Spread = styled.div``;
+export const SelectedTeamLogo = styled.image``;
+export const UserCommentBox = styled.div``;
+export const UserComment = styled.div``;
