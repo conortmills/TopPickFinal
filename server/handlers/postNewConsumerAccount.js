@@ -12,7 +12,7 @@ const options = {
   useUnifiedTopology: true,
 };
 
-const postNewBet = async (req, res) => {
+const postNewConsumerAccount = async (req, res) => {
   const _id = uuidv4();
   console.log(req.body);
   try {
@@ -20,7 +20,9 @@ const postNewBet = async (req, res) => {
     await client.connect();
     const db = client.db("TopPicker");
 
-    const bet = await db.collection("bets").insertOne({ _id, ...req.body });
+    const account = await db
+      .collection("consumeraccounts")
+      .insertOne({ _id, ...req.body });
 
     res.status(201).json({ status: 201, data: req.body, id: _id });
   } catch (err) {
@@ -29,4 +31,4 @@ const postNewBet = async (req, res) => {
   }
 };
 
-module.exports = { postNewBet };
+module.exports = { postNewConsumerAccount };

@@ -12,43 +12,35 @@ const options = {
   useUnifiedTopology: true,
 };
 
-const getAllAccounts = async (req, res) => {
+// get all items from the database
+const unfollowUser = async (req, res) => {
   try {
-    const offset = req.params.offset ? req.params.offset : 0;
-    const quantity = 10;
+    const _id = req.params._id;
+    console.log(_id);
+    const { user } = req.body;
+    console.log(req.body.user);
 
-    // create a new client
     const client = new MongoClient(MONGO_URI, options);
 
-    // connect to the client
     await client.connect();
 
     // connect to the database
     const db = client.db("TopPicker");
+
     console.log("CONNECTED");
 
-    // retreive all items
-    const allAccounts = await db
-      .collection("pickeraccounts")
-      .find()
-      .skip(parseInt(offset))
-      .limit(quantity)
-      .toArray();
+    await db
+      .collection("consumeraccounts")
+      .updateOne({ _id: user }, { $pull: { following: _id } });
 
-    //close the collection
     client.close();
     console.log("DISCONNECTED");
 
-    // return the json object and status
-    return (
-      // SUCCESS return
-      res.status(200).json({
-        status: 200,
-        data: allAccounts,
-      })
-    );
+    return res.status(200).json({
+      status: 200,
+      message: _id,
+    });
   } catch (err) {
-    // ERROR return
     res.status(400).json({
       status: 400,
       message: err.message,
@@ -57,4 +49,4 @@ const getAllAccounts = async (req, res) => {
 };
 
 // export handler function
-module.exports = { getAllAccounts };
+module.exports = { unfollowUser };

@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router";
-
+import React from "react";
+//component imports
 import {
   CardWrapper,
   TotalCardContainer,
   Card,
-  TopHalf,
   ImageBox,
+  TopHalf,
   AvatarImage,
   UserInfoBox,
   UserHandle,
@@ -14,27 +13,23 @@ import {
   BetTimeStamp,
   BottomHalf,
   BetDetailsBox,
-  Team1,
-  Team2,
-  FollowButton,
   Matchup,
   Spread,
   SelectedTeamLogo,
   UserCommentBox,
   UserComment,
-} from "./BetDetailsStyled";
+} from "./ProfileStyled";
 
-const BetDetails = () => {
-  // this is to keep company information locally
+import { NavLink } from "react-router-dom";
+import styled from "styled-components";
+
+//component responsible for rendering cards on the homepage based off of data accessed from the DB
+//component functions as link to item details
+export const BetCard = ({ betID }) => {
   const [bet, setBet] = useState("");
-  const [account, setAccount] = useState("");
-  const [status, setStatus] = useState(null);
-  // this is the id that we get in the url
-  const { id } = useParams();
 
-  // this is to fetch a specific item with the id in the url
   useEffect(() => {
-    fetch(`/toppicker/bets/${id}`)
+    fetch(`/toppicker/bets/${betID}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -46,27 +41,14 @@ const BetDetails = () => {
       });
   }, []);
 
-  useEffect(() => {
-    fetch(`/toppicker/profile/get/${bet.data.accountID}.`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setAccount(data);
-      })
-      .catch((err) => {
-        setStatus("error");
-        console.log(err);
-      });
-  }, [bet]);
-
   return (
     <CardWrapper>
       <TotalCardContainer>
         <Card>
           <TopHalf>
             {/* <ImageBox>
-              <AvatarImage src={"Adfadfa"} />
-            </ImageBox> */}
+            <AvatarImage src={"Adfadfa"} />
+          </ImageBox> */}
             <UserInfoBox>
               <UserHandle to={`/profile/${bet.data.accountID}`}>
                 account.data.handle
@@ -82,8 +64,8 @@ const BetDetails = () => {
               {/* <SelectedTeamLogo src="bet.data."/> */}
             </BetDetailsBox>
             {/* <UserCommentBox>
-              <UserComment>Comment</UserComment>
-            </UserCommentBox> */}
+            <UserComment>Comment</UserComment>
+          </UserCommentBox> */}
             <FollowButton></FollowButton>
           </BottomHalf>
         </Card>
@@ -91,5 +73,3 @@ const BetDetails = () => {
     </CardWrapper>
   );
 };
-
-export default BetDetails;

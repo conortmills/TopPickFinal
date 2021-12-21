@@ -6,17 +6,20 @@ const morgan = require("morgan");
 
 // handlers
 
-const { deleteFollowed } = require("./handlers/deleteFollowed.js");
+const { followUser } = require("./handlers/followUser.js");
 const { getAllAccounts } = require("./handlers/getAllAccounts.js");
 const { getAllFollowedBy } = require("./handlers/getAllFollowedBy.js");
 const { getAllMyBets } = require("./handlers/getAllMyBets.js");
 const { getAllNBABets } = require("./handlers/getAllNBABets.js");
 const { getAllUserBets } = require("./handlers/getAllUserBets");
 const { getBetByID } = require("./handlers/getBetByID");
-const { postNewAccount } = require("./handlers/postNewAccount");
+const { postNewPickerAccount } = require("./handlers/postNewPickerAccount");
+const { postNewConsumerAccount } = require("./handlers/postNewConsumerAccount");
 const { postNewBet } = require("./handlers/postNewBet");
 const { updateProfileInfo } = require("./handlers/updateProfileInfo");
-const { updateUsersFollowed } = require("./handlers/updateUsersFollowed");
+const { unfollowUser } = require("./handlers/unfollowUser");
+const { getProfile } = require("./handlers/getProfile");
+const { getAllBets } = require("./handlers/getAllBets");
 
 //port
 const PORT = 4000;
@@ -40,18 +43,20 @@ express()
   .use("/", express.static(__dirname + "/"))
 
   //REST ENDPOINTS
-
-  .delete("/toppicker/unfollow/:_id", deleteFollowed)
+  .get("/toppicker/bets", getAllBets)
+  .get("/toppicker/profile/get/:_id", getProfile)
   .get("/toppicker/accounts", getAllAccounts)
-  .get("/toppicker/accounts/followedby/:_id", getAllFollowedBy)
+  .get("/toppicker/accounts/following/:_id", getAllFollowedBy)
   .get("/toppicker/myprofile/:_id", getAllMyBets)
   .get("/toppicker/makebet/allNBAbets/:date", getAllNBABets)
   .get("/toppicker/profile/:_id", getAllUserBets)
   .get("/toppicker/bets/:_id", getBetByID)
-  .post("/toppicker/createaccount", postNewAccount)
+  .post("/toppicker/createPickerAaccount", postNewPickerAccount)
+  .post("/toppicker/createConsumerAccount", postNewConsumerAccount)
   .post("/toppicker/createbet", postNewBet)
-  .update("/toppicker/updateprofile", updateProfileInfo)
-  .update("/toppicker/usersfollowed", updateUsersFollowed)
+  .put("/toppicker/updateprofile", updateProfileInfo)
+  .put("/toppicker/follow/:_id", followUser)
+  .put("/toppicker/unfollow/:_id", unfollowUser)
 
   // catch all endpoint
   .get("*", (req, res) => {

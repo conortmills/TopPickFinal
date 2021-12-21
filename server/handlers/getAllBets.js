@@ -12,7 +12,7 @@ const options = {
   useUnifiedTopology: true,
 };
 
-const getAllAccounts = async (req, res) => {
+const getAllBets = async (req, res) => {
   try {
     const offset = req.params.offset ? req.params.offset : 0;
     const quantity = 10;
@@ -28,8 +28,8 @@ const getAllAccounts = async (req, res) => {
     console.log("CONNECTED");
 
     // retreive all items
-    const allAccounts = await db
-      .collection("pickeraccounts")
+    const allBets = await db
+      .collection("bets")
       .find()
       .skip(parseInt(offset))
       .limit(quantity)
@@ -44,7 +44,7 @@ const getAllAccounts = async (req, res) => {
       // SUCCESS return
       res.status(200).json({
         status: 200,
-        data: allAccounts,
+        data: allBets,
       })
     );
   } catch (err) {
@@ -57,4 +57,4 @@ const getAllAccounts = async (req, res) => {
 };
 
 // export handler function
-module.exports = { getAllAccounts };
+module.exports = { getAllBets };

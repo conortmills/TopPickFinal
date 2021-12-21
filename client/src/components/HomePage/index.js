@@ -19,16 +19,17 @@ import { LoadMore } from "./LoadMoreButton";
 const HomePage = () => {
   //receive items from context. Also receiving function for incrementing the offset when 'load more' button is clicked
 
-  const { status, setStatus } = useContext();
+  // const { status, setStatus } = useContext();
   // CurrentUserContext
-  const [updateFeed, setUpdateFeed] = useState(false);
-  const [betFeed, setBedFeed] = useState(null);
+  // const [updateFeed, setUpdateFeed] = useState(false);
+  const [betFeed, setBetFeed] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [homeFeed, setHomeFeed] = useState(null);
-  const {
-    state: { items },
-    actions: { changeOffsetNumber },
-  } = useContext(TopPickerContext);
+  const [following, setFollowing] = useState([]);
+  // const [homeFeed, setHomeFeed] = useState(null);
+  // const {
+  //   state: { items },
+  //   actions: { changeOffsetNumber },
+  // } = useContext(TopPickerContext);
 
   //function responsible for calling context function which leads to the fetching of 6 additional items
   const HandleClick = () => {
@@ -37,11 +38,12 @@ const HomePage = () => {
 
   // console.log(userAvatar);
   useEffect(() => {
-    fetch("/api/me/home-feed")
+    fetch("/toppicker/bets")
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         // setNewsFeed(data);
+        setBetFeed(data);
         setLoading(true);
       })
 
@@ -49,32 +51,49 @@ const HomePage = () => {
         setStatus("error");
         console.log(err);
       });
-  }, [updateFeed]);
+  }, []);
   //Establishes dynamic flexboxes for rendering items received from database
   return (
     <div>
-      {loading ? (
-        status === "error" ? (
-          <GetErrorScreen />
-        ) : (
-          <FeedBox>
-            {homeFeed && (
-              <>
-                <BetFeed>
-                  {homeFeed.tweetIds.map((keyId) => {
-                    return <BetCard tweetId={homeFeed.tweetsById[keyId]} />;
-                  })}
-                </BetFeed>
-              </>
-            )}
-          </FeedBox>
-        )
-      ) : (
-        <LoadingBox>
-          <FiLoader style={{ fontSize: "50px" }} />
-        </LoadingBox>
-      )}
+      <FeedBox>
+        <BetFeed>
+          {betFeed.map((bet) => {
+            betMaker = bet.accountID;
+            if (
+              following.find((account) => {
+                return betMaker.toLowerCase().includes(account.toLowerCase());
+              })
+            ) {
+              <BetCard betID={bet._id} />;
+            }
+          })}
+        </BetFeed>
+      </FeedBox>
     </div>
+
+    // <div>
+    //   {loading ? (
+    //     status === "error" ? (
+    //       <GetErrorScreen />
+    //     ) : (
+    //       <FeedBox>
+    //         {homeFeed && (
+    //           <>
+    //             <BetFeed>
+    //               {homeFeed.tweetIds.map((keyId) => {
+    //                 return <BetCard tweetId={homeFeed.tweetsById[keyId]} />;
+    //               })}
+    //             </BetFeed>
+    //           </>
+    //         )}
+    //       </FeedBox>
+    //     )
+    //   ) : (
+    //     <LoadingBox>
+    //       <FiLoader style={{ fontSize: "50px" }} />
+    //     </LoadingBox>
+    //   )}
+    // </div>
   );
 };
 export default HomePage;

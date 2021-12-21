@@ -25,30 +25,48 @@ import styled from "styled-components";
 
 //component responsible for rendering cards on the homepage based off of data accessed from the DB
 //component functions as link to item details
-export const BetCard = ({ item }) => {
+export const BetCard = ({ betID }) => {
+  const [bet, setBet] = useState("");
+
+  useEffect(() => {
+    fetch(`/toppicker/bets/${betID}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setBet(data);
+      })
+      .catch((err) => {
+        setStatus("error");
+        console.log(err);
+      });
+  }, []);
+
   return (
     <CardWrapper>
       <TotalCardContainer>
-        <Card to={`/toppicker/bets/${item._id}`}>
+        <Card>
           <TopHalf>
-            <ImageBox>
-              <AvatarImage src={"sdfa"} />
-            </ImageBox>
+            {/* <ImageBox>
+            <AvatarImage src={"Adfadfa"} />
+          </ImageBox> */}
             <UserInfoBox>
-              <UserHandle>User Handle</UserHandle>
-              <UserDisplayName>User Display Name</UserDisplayName>
+              <UserHandle to={`/profile/${bet.data.accountID}`}>
+                account.data.handle
+              </UserHandle>
             </UserInfoBox>
-            <BetTimeStamp>Time Stamp</BetTimeStamp>
+            <BetTimeStamp>bet.data.timestamp</BetTimeStamp>
           </TopHalf>
           <BottomHalf>
             <BetDetailsBox>
-              <Matchup>Match up </Matchup>
-              <Spread> Spread </Spread>
-              <SelectedTeamLogo />
+              <Team1>bet.data.team1 </Team1>
+              <Team2>bet.data.team2 </Team2>
+              <Spread> bet.data.spread </Spread>
+              {/* <SelectedTeamLogo src="bet.data."/> */}
             </BetDetailsBox>
-            <UserCommentBox>
-              <UserComment>Comment</UserComment>
-            </UserCommentBox>
+            {/* <UserCommentBox>
+            <UserComment>Comment</UserComment>
+          </UserCommentBox> */}
+            <FollowButton></FollowButton>
           </BottomHalf>
         </Card>
       </TotalCardContainer>

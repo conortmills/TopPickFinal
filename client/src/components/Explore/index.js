@@ -7,13 +7,14 @@ import {
 } from "./ExploreStyled";
 
 const Explore = () => {
+  const [exploreFeed, setExploreFeed] = [];
+
   useEffect(() => {
-    fetch("/api/me/home-feed")
+    fetch("/toppicker/accounts")
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        // setNewsFeed(data);
-        // setLoading(true);
+        setExploreFeed(data);
       })
 
       .catch((err) => {
@@ -28,7 +29,11 @@ const Explore = () => {
         <Welcome>
           Hey $$$NAME$$$ here are some accounts we think you should check out
         </Welcome>
-        <ProfileFeedContainer></ProfileFeedContainer>
+        <ProfileFeedContainer>
+          {exploreFeed.accounts.map((accountID) => {
+            return <ProfileCard accountID={accountID} />;
+          })}
+        </ProfileFeedContainer>
       </ExploreContainer>
     </div>
   );

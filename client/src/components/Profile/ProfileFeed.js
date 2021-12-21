@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Tweet from "./Tweet.js";
 import styled from "styled-components";
+import { BetCard } from "../HomePage/BetCard.js";
 
-const UserFeed = (userHandleFeed) => {
+const UserFeed = (accountID) => {
   const [userFeed, setUserFeed] = useState(null);
-  console.log(userHandleFeed.userHandleFeed);
+  console.log(userFeed);
+
   useEffect(() => {
-    fetch(`/api/${userHandleFeed.userHandleFeed}/feed`)
+    fetch(`/toppicker/profile/${accountID}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -18,11 +20,11 @@ const UserFeed = (userHandleFeed) => {
     <UserFe>
       {userFeed && (
         <>
-          <UserTweetFeed>
-            {userFeed.tweetIds.map((keyId) => {
-              return <Tweet tweetId={userFeed.tweetsById[keyId]} />;
+          <UserBetFeed>
+            {userFeed.map((keyId) => {
+              return <BetCard betID={keyId._id} />;
             })}
-          </UserTweetFeed>
+          </UserBetFeed>
         </>
       )}
     </UserFe>
@@ -37,7 +39,7 @@ const UserFe = styled.div`
   width: 800px;
 `;
 
-const UserTweetFeed = styled.div`
+const UserBetFeed = styled.div`
   display: flex;
   flex-direction: column;
   width: 800px;

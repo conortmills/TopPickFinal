@@ -12,19 +12,18 @@ const options = {
   useUnifiedTopology: true,
 };
 
-const postNewAccount = async (req, res) => {
+const postNewPickerAccount = async (req, res) => {
   const _id = uuidv4();
   console.log(req.body);
   try {
     const client = new MongoClient(MONGO_URI, options);
     await client.connect();
-    const db = client.db("Toppicker");
+    const db = client.db("TopPicker");
 
     const account = await db
-      .collection("accounts")
+      .collection("pickeraccounts")
       .insertOne({ _id, ...req.body });
 
- 
     res.status(201).json({ status: 201, data: req.body, id: _id });
   } catch (err) {
     console.log(err.stack);
@@ -32,4 +31,4 @@ const postNewAccount = async (req, res) => {
   }
 };
 
-module.exports = { postNewAccount };
+module.exports = { postNewPickerAccount };

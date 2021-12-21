@@ -15,5 +15,3 @@ export const EntryBox = styled.div`
 export const EntryTitle = styled.div``;
 
 export const UserEntry = styled.input``;
-
-export const Submit = styled.button``;

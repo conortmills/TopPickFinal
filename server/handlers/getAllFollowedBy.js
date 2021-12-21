@@ -12,51 +12,40 @@ const options = {
   useUnifiedTopology: true,
 };
 
-
+// get all items from the database
 const getAllFollowedBy = async (req, res) => {
-  try {
-   
-    const offset = req.params.offset ? req.params.offset : 0;
-    const quantity = 10;
+  console.log(req.params._id);
+  // get company id number from the request parameters
+  const accountID = req.params._id;
 
-    // create a new client
-    const client = new MongoClient(MONGO_URI, options);
+  console.log(accountID);
 
-    // connect to the client
-    await client.connect();
+  //get offset and quantity for pagination from the request body
+  // conditional to account for no body - start from beginning and give 6 items
 
-    // connect to the database
-    const db = client.db("Toppicker");
-    console.log("CONNECTED");
+  // create a new client
+  const client = new MongoClient(MONGO_URI, options);
 
-    // retreive all items
-    const allItems = await db
-      .collection("items")
-      .find()
-      .skip(parseInt(offset))
-      .limit(quantity)
-      .toArray();
+  // connect to the client
+  await client.connect();
 
-    //close the collection
-    client.close();
-    console.log("DISCONNECTED");
+  // connect to the database
+  const db = client.db("TopPicker");
+  console.log("CONNECTED");
 
-    // return the json object and status
-    return (
-      // SUCCESS return
-      res.status(200).json({
-        status: 200,
-        data: allItems,
-      })
-    );
-  } catch (err) {
-    // ERROR return
-    res.status(400).json({
-      status: 400,
-      message: err.message,
-    });
+  // retreive all items
+  const userBets = await db
+    .collection("consumeraccounts")
+    .find({ _id: accountID })
+    .toArray();
+
+  if (!userBets) {
+    res.status(404).json({ status: 404 });
+  } else {
+    res.status(200).json({ status: 200, data: userBets });
   }
+  client.close();
+  console.log("DISCONNECTED");
 };
-
 // export handler function
 module.exports = { getAllFollowedBy };

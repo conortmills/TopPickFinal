@@ -14,46 +14,22 @@ const options = {
 
 // get all items from the database
 const getBetByID = async (req, res) => {
-  try {
-    // get the id number from params
-    const { _id } = req.params;
+  const client = new MongoClient(MONGO_URI, options);
 
-    // create a new client
-    const client = new MongoClient(MONGO_URI, options);
+  await client.connect();
 
-    // connect to the client
-    await client.connect();
+  const db = client.db("TopPicker");
 
-    // connect to the database
-    const db = client.db("Toppicker");
-    console.log("CONNECTED");
+  const _id = req.params._id;
 
-    // retreive all items
-    // parseId() required for the function to recognize the variable
-    // _id from params as a number. If it's not there the function returns null
-    const singleBet = await db
-      .collection("bets")
-      .findOne({ _id: parseInt(_id) });
+  console.log(_id);
 
-    //close the collection
+  db.collection("bets").findOne({ _id }, (err, result) => {
+    result
+      ? res.status(200).json({ status: 200, _id, data: result })
+      : res.status(404).json({ status: 404, _id, data: "Not Found" });
     client.close();
-    console.log("DISCONNECTED");
-
-    // return the json object and status
-    return (
-      // SUCCESS return
-      res.status(200).json({
-        status: 200,
-        data: singleBet,
-      })
-    );
-  } catch (err) {
-    // ERROR return
-    res.status(400).json({
-      status: 400,
-      message: err.message,
-    });
-  }
+  });
 };
 
 // export handler function

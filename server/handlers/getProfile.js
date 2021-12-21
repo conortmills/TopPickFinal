@@ -13,7 +13,7 @@ const options = {
 };
 
 // get all items from the database
-const getAllUserBets = async (req, res) => {
+const getProfile = async (req, res) => {
   console.log(req.params._id);
   // get company id number from the request parameters
   const accountID = req.params._id;
@@ -34,21 +34,19 @@ const getAllUserBets = async (req, res) => {
   console.log("CONNECTED");
 
   // retreive all items
-  const userBets = await db
-    .collection("bets")
-    .find({ accountID: accountID })
+  const userProfile = await db
+    .collection("pickeraccounts")
+    .find({ _id: accountID })
     .toArray();
 
-  if (!userBets) {
+  if (!userProfile) {
     res.status(404).json({ status: 404 });
   } else {
-    res.status(200).json({ status: 200, data: userBets });
+    res.status(200).json({ status: 200, data: userProfile });
   }
   client.close();
   console.log("DISCONNECTED");
 };
 
-//close the collection
-
 // export handler function
-module.exports = { getAllUserBets };
+module.exports = { getProfile };

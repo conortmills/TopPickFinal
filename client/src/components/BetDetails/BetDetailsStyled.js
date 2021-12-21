@@ -99,13 +99,16 @@ export const Span = styled.span`
   margin-left: 5px;
 `;
 
+export const Team1 = styled.div``;
+export const Team2 = styled.div``;
+export const FollowButton = styled.button``;
 export const CardWrapper = styled.div``;
 export const TotalCardContainer = styled.div``;
-export const Card = styled(NavLink)``;
+export const Card = styled.div``;
 export const TopHalf = styled.div``;
 
 export const UserInfoBox = styled.div``;
-export const UserHandle = styled.div``;
+export const UserHandle = styled(NavLink)``;
 export const UserDisplayName = styled.div``;
 export const BetTimeStamp = styled.div``;
 export const BottomHalf = styled.div``;
