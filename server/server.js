@@ -1,5 +1,7 @@
 "use strict";
 
+const api_key = process.env.api_key;
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
@@ -42,7 +44,11 @@ express()
   .use(express.urlencoded({ extended: false }))
   .use("/", express.static(__dirname + "/"))
 
-  //REST ENDPOINTS
+  //REST ENDPOINTS/
+  .get(
+    "https://api.the-odds-api.com/v4/sports/basketball_nba/odds/?apiKey=14c8736c45b7057cd5906611f2efe583&regions=us&markets=h2h,spreads&oddsFormat=american",
+    getAllNBABets
+  )
   .get("/toppicker/bets", getAllBets)
   .get("/toppicker/profile/get/:_id", getProfile)
   .get("/toppicker/accounts", getAllAccounts)
