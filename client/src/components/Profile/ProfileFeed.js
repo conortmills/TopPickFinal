@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Tweet from "./Tweet.js";
 import styled from "styled-components";
-import { BetCard } from "../HomePage/BetCard.js";
+import ProfileBetCard from "./BetCard";
 
-const UserFeed = (accountID) => {
+const ProfileFeed = ({ accountID }) => {
   const [userFeed, setUserFeed] = useState(null);
   console.log(userFeed);
 
@@ -21,8 +20,9 @@ const UserFeed = (accountID) => {
       {userFeed && (
         <>
           <UserBetFeed>
-            {userFeed.map((keyId) => {
-              return <BetCard betID={keyId._id} />;
+            {userFeed.data.map((keyId) => {
+              console.log(keyId);
+              return <ProfileBetCard bet={keyId} />;
             })}
           </UserBetFeed>
         </>
@@ -31,16 +31,18 @@ const UserFeed = (accountID) => {
   );
 };
 
-export default UserFeed;
+export default ProfileFeed;
 
 const UserFe = styled.div`
   display: flex;
   flex-direction: column;
-  width: 800px;
+  width: 100%;
+  margin-right: 20px;
 `;
 
 const UserBetFeed = styled.div`
   display: flex;
   flex-direction: column;
-  width: 800px;
+  width: 100%;
+  border: black 1px;
 `;

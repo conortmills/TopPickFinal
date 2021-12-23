@@ -49,5 +49,5 @@ const ProfileLine = styled.div``;
 const FavoriteTeam = styled.div``;
 const Location = styled.div``;
 const SectionName = styled.div``;
-const TextEntry = styled.textArea``;
+const TextEntry = styled.textarea``;
 const SubmitChanges = styled.button``;

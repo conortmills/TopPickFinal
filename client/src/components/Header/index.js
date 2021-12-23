@@ -1,23 +1,37 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Wrapper, WebsiteLogo, NavBox, HomeNav } from "./HeaderStyled";
+import LogoutButton from "../LogoutButton";
+import { TopPickerContext } from "../TopPickerContext";
 //components
 
 import { BsHouseDoor } from "react-icons/bs";
-// import logo from "/Logo_alternate_color.png";
 
-//Create header component with home icon functioning as a to home link, website logo also functioning as a home link,
-// and cart ico functioning as a link to the cart
-
-const Header = (cartCount) => {
+const Header = () => {
+  const { accountType, setAccountType } = useContext(TopPickerContext);
+  const { currentUser, setCurrentUser } = useContext(TopPickerContext);
   return (
-    <Wrapper>
-      <HomeNav to="/">
-        <BsHouseDoor size="lg" />
-      </HomeNav>
-      <NavBox to="/">
-        <WebsiteLogo src="/foabtLogo.png" />
-      </NavBox>
-    </Wrapper>
+    <div>
+      {accountType && (
+        <div>
+          <Wrapper>
+            {accountType === "consumer" ? (
+              <HomeNav to="/homefeed">
+                <BsHouseDoor size="lg" />
+              </HomeNav>
+            ) : (
+              <HomeNav to={`/profile/${currentUser}`}>
+                <BsHouseDoor size="lg" />
+              </HomeNav>
+            )}
+
+            <NavBox to="/">
+              <WebsiteLogo />
+            </NavBox>
+            <LogoutButton></LogoutButton>
+          </Wrapper>
+        </div>
+      )}
+    </div>
   );
 };
 export default Header;

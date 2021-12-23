@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const Wrap = styled.div`
   width: 100%;
@@ -108,7 +108,7 @@ export const Card = styled.div``;
 export const TopHalf = styled.div``;
 
 export const UserInfoBox = styled.div``;
-export const UserHandle = styled(NavLink)``;
+export const UserHandle = styled(Link)``;
 export const UserDisplayName = styled.div``;
 export const BetTimeStamp = styled.div``;
 export const BottomHalf = styled.div``;

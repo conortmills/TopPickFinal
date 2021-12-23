@@ -25,4 +25,5 @@ export const UserEntry = styled.input`
 export const Submit = styled.button`
   background-color: lightblue;
   height: 100px;
+  width: 100%;
 `;

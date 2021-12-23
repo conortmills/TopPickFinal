@@ -1,21 +1,27 @@
 import React from "react";
 import styled from "styled-components";
+import { useContext } from "react";
 import { Wrapper, Title, Main, Button } from "./styled-components";
 import { LoadMore } from "../HomePage/LoadMoreButton";
+import { Link } from "react-router-dom";
+import { TopPickerContext } from "../TopPickerContext";
 const Confirmation = () => {
+  const { currentUser, setCurrentUser } = useContext(TopPickerContext);
   return (
     <Wrapper>
       <Main>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <Title>Thank You!</Title>
-        <p>A confirmation has been sent to your email.</p>
-        <p>Since you're here, join our list for discounts!</p>
+        <Text>Your bet has been added to your feed!</Text>
+        <Options>Please choose what you would like to do now</Options>
+        <Option1 to={`/place-bet`}>Place another bet</Option1>
+        <Option2 to={`/profile/${currentUser}`}>Return to your profile</Option2>
       </Main>
     </Wrapper>
   );
 };
+
+const Text = styled.div``;
+const Options = styled.div``;
+const Option1 = styled(Link)``;
+const Option2 = styled(Link)``;
 
 export default Confirmation;

@@ -11,10 +11,13 @@ import SetupAccount from "./SetupAccount";
 import Profile from "./Profile";
 import Explore from "./Explore";
 import PlaceBets from "./PlaceBets";
+import AccountChoice from "./AccountChoice";
+import CreateConsumerAccount from "./CreateConsumerAccount";
 
 //style
 import styled from "styled-components";
 import GlobalStyles from "./GlobalStyles";
+import Confirmation from "./Confirmattion";
 
 function App() {
   return (
@@ -24,38 +27,43 @@ function App() {
       <Main>
         <Routes>
           <Route exact path="/" element={<SignIn />}></Route>
+          <Route exact path="/place-bet" element={<PlaceBets />}></Route>
           <Route
             exact
-            path="/create-account"
-            element={<CreateAccount />}
+            path="/create-consumer-account"
+            element={<CreateConsumerAccount />}
           ></Route>
-          <Routes>
-          <Route exact path="/account-choice" element={<AccountChoice />}></Route>
+          <Route exact path="/confirmed" element={<Confirmation />}></Route>
           <Route
             exact
-            path="/create-account"
+            path="/account-choice"
+            element={<AccountChoice />}
+          ></Route>
+          <Route
+            exact
+            path="/create-picker-account"
             element={<CreateAccount />}
           ></Route>
           <Route exact path="/setup-account" element={<SetupAccount />}></Route>
           <Route
             exact
-            path="/bet-details/:_id"
+            path="/bet-details/:accountID"
             element={<BetDetails />}
           ></Route>
           <Route exact path="/edit-profile" element={<EditProfile />}></Route>
-          <Route exact path="/profile/:_id" element={<Profile />}></Route>
+          <Route exact path="/profile/:accountID" element={<Profile />}></Route>
           <Route exact path="/explore" element={<Explore />}></Route>
           <Route exact path="/homefeed" element={<HomePage />}></Route>
-          <Route exact path="/place-bets" element={<PlaceBets />}></Route>
+          <Route exact path="/place-bet" element={<PlaceBets />}></Route>
         </Routes>
       </Main>
-      <Footer />
+      {/* <Footer /> */}
     </BrowserRouter>
   );
 }
 const Main = styled.div`
-  position: relative;
+  /* position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; */
 `;
 export default App;

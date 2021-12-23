@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { FollowButton } from "../BetDetails/BetDetailsStyled";
+import { TopPickerContext } from "../TopPickerContext";
+import { Link } from "react-router-dom";
 
 import {
   CardWrapper,
@@ -10,7 +13,9 @@ import {
 } from "./ExploreStyled";
 
 const ProfileCard = ({ accountID }) => {
-  const [profile, setProfile] = useState(null);
+  const { currentUser, setCurrentUser } = useContext(TopPickerContext);
+  const [status, setStatus] = useState(null);
+  const [profile, setUserProfile] = useState(null);
 
   useEffect(() => {
     fetch(`/toppicker/profile/get/${accountID}`)
@@ -21,14 +26,44 @@ const ProfileCard = ({ accountID }) => {
       });
   }, []);
 
+  // function followUser() {
+  //   const follow = () => {
+  //     fetch(`/toppicker/follow/${profile.data.accountID}`, {
+  //       method: "PUT",
+  //       body: JSON.stringify(currentUser),
+  //     })
+  //       .then((response) => response.json())
+  //       .then((json) => {
+  //         console.log("JSON", json);
+  //       })
+  //       .catch((err) => {
+  //         setStatus("error");
+  //         console.log(err);
+  //       });
+  //   };
+  //   follow();
+  // }
+
   return (
     <CardWrapper>
-      <AccountDetails>
-        <Handle>profile.handle</Handle>
-        <Location>profile.location</Location>
-        <FavoriteTeam>profile.favoriteteam</FavoriteTeam>
-      </AccountDetails>
-      <Bio>profile.bio</Bio>
+      {profile && (
+        <div>
+          <AccountDetails>
+            <Link to={`/profile/${profile.data[0]._id}`}>
+              {profile.data[0].handle}
+            </Link>
+            <Location>Location: {profile.data[0].location}</Location>
+            <FavoriteTeam>
+              Favorite Sports Team: {profile.data[0].favTeam}
+            </FavoriteTeam>
+            <Bio>Bio: {profile.data[0].bio}</Bio>
+          </AccountDetails>
+
+          {/* <FollowButton onClick={followUser()}>Follow</FollowButton> */}
+        </div>
+      )}
     </CardWrapper>
   );
 };
+
+export default ProfileCard;

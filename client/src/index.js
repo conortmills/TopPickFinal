@@ -2,12 +2,19 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/App";
 import { TopPickerProvider } from "./components/TopPickerContext";
+import { Auth0Provider } from "@auth0/auth0-react";
 
 ReactDOM.render(
   <React.StrictMode>
-    <TopPickerProvider>
-      <App />
-    </TopPickerProvider>
+    <Auth0Provider
+      domain="dev-1u8i63t8.us.auth0.com"
+      clientId="NyfpflDmb0M7md7lH6QgSDmsTgiPz9OB"
+      redirectUri="http://localhost:3000/account-choice"
+    >
+      <TopPickerProvider>
+        <App />
+      </TopPickerProvider>
+    </Auth0Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

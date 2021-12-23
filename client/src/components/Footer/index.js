@@ -6,6 +6,7 @@ import { WebsiteLogo } from "../Footer/FooterStyled";
 const Footer = () => {
   return (
     <Wrap>
+      <h1>Footer</h1>
       <WebsiteLogo src="/foabtLogo.png" />
     </Wrap>
   );

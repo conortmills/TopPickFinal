@@ -12,7 +12,6 @@ const { followUser } = require("./handlers/followUser.js");
 const { getAllAccounts } = require("./handlers/getAllAccounts.js");
 const { getAllFollowedBy } = require("./handlers/getAllFollowedBy.js");
 const { getAllMyBets } = require("./handlers/getAllMyBets.js");
-const { getAllNBABets } = require("./handlers/getAllNBABets.js");
 const { getAllUserBets } = require("./handlers/getAllUserBets");
 const { getBetByID } = require("./handlers/getBetByID");
 const { postNewPickerAccount } = require("./handlers/postNewPickerAccount");
@@ -22,6 +21,7 @@ const { updateProfileInfo } = require("./handlers/updateProfileInfo");
 const { unfollowUser } = require("./handlers/unfollowUser");
 const { getProfile } = require("./handlers/getProfile");
 const { getAllBets } = require("./handlers/getAllBets");
+const { getConsumerProfile } = require("./handlers/getConsumerAccount");
 
 //port
 const PORT = 4000;
@@ -39,30 +39,26 @@ express()
     next();
   })
   .use(morgan("tiny"))
-  .use(express.static("./server/assets"))
+  // .use(express.static("./server/assets"))
   .use(bodyParser.json())
-  .use(express.urlencoded({ extended: false }))
-  .use("/", express.static(__dirname + "/"))
+  // .use(express.urlencoded({ extended: false }))
+  // .use("/", express.static(__dirname + "/"))
 
   //REST ENDPOINTS/
-  .get(
-    "https://api.the-odds-api.com/v4/sports/basketball_nba/odds/?apiKey=14c8736c45b7057cd5906611f2efe583&regions=us&markets=h2h,spreads&oddsFormat=american",
-    getAllNBABets
-  )
   .get("/toppicker/bets", getAllBets)
   .get("/toppicker/profile/get/:_id", getProfile)
   .get("/toppicker/accounts", getAllAccounts)
   .get("/toppicker/accounts/following/:_id", getAllFollowedBy)
   .get("/toppicker/myprofile/:_id", getAllMyBets)
-  .get("/toppicker/makebet/allNBAbets/:date", getAllNBABets)
   .get("/toppicker/profile/:_id", getAllUserBets)
   .get("/toppicker/bets/:_id", getBetByID)
-  .post("/toppicker/createPickerAaccount", postNewPickerAccount)
+  .post("/toppicker/createPickerAccount", postNewPickerAccount)
   .post("/toppicker/createConsumerAccount", postNewConsumerAccount)
   .post("/toppicker/createbet", postNewBet)
   .put("/toppicker/updateprofile", updateProfileInfo)
   .put("/toppicker/follow/:_id", followUser)
   .put("/toppicker/unfollow/:_id", unfollowUser)
+  .get("/toppicker/consumerprofile/get/:_id", getConsumerProfile)
 
   // catch all endpoint
   .get("*", (req, res) => {

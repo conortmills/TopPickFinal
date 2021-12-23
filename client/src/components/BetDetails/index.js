@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
+import styled from "styled-components";
 
 import {
   CardWrapper,
@@ -46,18 +47,14 @@ const BetDetails = () => {
       });
   }, []);
 
-  useEffect(() => {
-    fetch(`/toppicker/profile/get/${bet.data.accountID}.`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setAccount(data);
-      })
-      .catch((err) => {
-        setStatus("error");
-        console.log(err);
+  function followUser() {
+    const follow = () => {
+      fetch(`/toppicker/follow/${bet.data.accountID}`, {
+        method: "PUT",
+        body: JSON.stringify,
       });
-  }, [bet]);
+    };
+  }
 
   return (
     <CardWrapper>
@@ -69,27 +66,40 @@ const BetDetails = () => {
             </ImageBox> */}
             <UserInfoBox>
               <UserHandle to={`/profile/${bet.data.accountID}`}>
-                account.data.handle
+                {bet.data.handle}
               </UserHandle>
             </UserInfoBox>
-            <BetTimeStamp>bet.data.timestamp</BetTimeStamp>
+            <BetTimeStamp>{bet.data.timestamp}</BetTimeStamp>
           </TopHalf>
           <BottomHalf>
             <BetDetailsBox>
-              <Team1>bet.data.team1 </Team1>
-              <Team2>bet.data.team2 </Team2>
-              <Spread> bet.data.spread </Spread>
+              <TeamBox>
+                {bet.data.away_team === bet.data.selected_team ? (
+                  <SelectedTeam>{bet.data.away_team}</SelectedTeam>
+                ) : (
+                  <Team1>{bet.data.away_team} </Team1>
+                )}
+                @
+                {bet.data.home_team === bet.data.selected_team ? (
+                  <SelectedTeam>{bet.data.home_team}</SelectedTeam>
+                ) : (
+                  <Team1>{bet.data.home_team} </Team1>
+                )}
+              </TeamBox>
+              <Spread> {bet.data.spread} </Spread>
               {/* <SelectedTeamLogo src="bet.data."/> */}
             </BetDetailsBox>
             {/* <UserCommentBox>
               <UserComment>Comment</UserComment>
             </UserCommentBox> */}
-            <FollowButton></FollowButton>
           </BottomHalf>
         </Card>
       </TotalCardContainer>
     </CardWrapper>
   );
 };
+
+const TeamBox = styled.div``;
+const SelectedTeam = styled.div``;
 
 export default BetDetails;

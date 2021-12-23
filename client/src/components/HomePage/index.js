@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { FiLoader } from "react-icons/fi";
+import { Link } from "react-router-dom";
 //context import
 import { TopPickerContext } from "../TopPickerContext";
 
@@ -22,21 +24,17 @@ const HomePage = () => {
   // const { status, setStatus } = useContext();
   // CurrentUserContext
   // const [updateFeed, setUpdateFeed] = useState(false);
+  const { currentUser, setCurrentUser } = useContext(TopPickerContext);
+  const { accountType, setAccountType } = useContext(TopPickerContext);
   const [betFeed, setBetFeed] = useState(null);
   const [loading, setLoading] = useState(false);
   const [following, setFollowing] = useState([]);
-  // const [homeFeed, setHomeFeed] = useState(null);
-  // const {
-  //   state: { items },
-  //   actions: { changeOffsetNumber },
-  // } = useContext(TopPickerContext);
+  const [status, setStatus] = useState("");
+  const [userProfile, setUserProfile] = useState("");
 
-  //function responsible for calling context function which leads to the fetching of 6 additional items
-  const HandleClick = () => {
-    changeOffsetNumber();
-  };
-
-  // console.log(userAvatar);
+  const { accountID } = useParams();
+  console.log(currentUser);
+  let checked = false;
   useEffect(() => {
     fetch("/toppicker/bets")
       .then((res) => res.json())
@@ -46,104 +44,111 @@ const HomePage = () => {
         setBetFeed(data);
         setLoading(true);
       })
-
       .catch((err) => {
         setStatus("error");
         console.log(err);
       });
-  }, []);
+  }, [currentUser]);
+
+  useEffect(() => {
+    fetch(`/toppicker/consumerprofile/get/${currentUser}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setUserProfile(data);
+      });
+  }, [currentUser]);
+
   //Establishes dynamic flexboxes for rendering items received from database
   return (
     <div>
-      <FeedBox>
-        <BetFeed>
-          {betFeed.map((bet) => {
-            betMaker = bet.accountID;
-            if (
-              following.find((account) => {
-                return betMaker.toLowerCase().includes(account.toLowerCase());
-              })
-            ) {
-              <BetCard betID={bet._id} />;
-            }
-          })}
-        </BetFeed>
-      </FeedBox>
+      {userProfile && (
+        <PageBox>
+          <StyledExplore to="/explore">EXPLORE</StyledExplore>
+          <Greeting>Hello, {userProfile.data[0].username}</Greeting>
+          {betFeed && (
+            <FeedBox>
+              <TheFeed>YOUR FEED</TheFeed>
+              <BetFeed>
+                {betFeed.data.map((bet) => {
+                  var betMaker = bet.accountID;
+                  console.log(betMaker);
+                  console.log(userProfile.data[0].following.length);
+                  if (
+                    userProfile.data[0].following.length === 0 &&
+                    checked === false
+                  ) {
+                    checked = true;
+                    return (
+                      <NoBets>
+                        You are not following anyone, please head to explore to
+                        start your feed!
+                      </NoBets>
+                    );
+                  } else if (
+                    userProfile.data[0].following.find((account) => {
+                      console.log("whatsgood");
+                      console.log(account);
+                      console.log(bet);
+                      console.log(betMaker);
+                      return betMaker
+                        .toLowerCase()
+                        .includes(account.toLowerCase());
+                    })
+                  ) {
+                    // {
+                    //   console.log("check");
+                    //   console.log(bet._id);
+                    // }
+                    return <BetCard betID={bet._id} />;
+                  }
+                })}
+              </BetFeed>
+            </FeedBox>
+          )}
+        </PageBox>
+      )}
     </div>
-
-    // <div>
-    //   {loading ? (
-    //     status === "error" ? (
-    //       <GetErrorScreen />
-    //     ) : (
-    //       <FeedBox>
-    //         {homeFeed && (
-    //           <>
-    //             <BetFeed>
-    //               {homeFeed.tweetIds.map((keyId) => {
-    //                 return <BetCard tweetId={homeFeed.tweetsById[keyId]} />;
-    //               })}
-    //             </BetFeed>
-    //           </>
-    //         )}
-    //       </FeedBox>
-    //     )
-    //   ) : (
-    //     <LoadingBox>
-    //       <FiLoader style={{ fontSize: "50px" }} />
-    //     </LoadingBox>
-    //   )}
-    // </div>
   );
 };
 export default HomePage;
+
+const TheFeed = styled.div`
+  text-align: center;
+  font-size: 30px;
+  border-bottom: solid 9px;
+  margin-bottom: 40px;
+`;
+
+const NoBets = styled.div`
+  font-size: 20px;
+`;
+
+const Greeting = styled.div`
+  font-size: 50px;
+  border: none;
+`;
+
+const StyledExplore = styled(Link)`
+  font-size: 40px;
+  text-align: center;
+  text-decoration: none;
+  padding: 20px;
+  border: solid 4px;
+`;
+
+const PageBox = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const FeedBox = styled.div`
   display: flex;
   flex-direction: column;
   border-style: solid;
-  border-width: 1px;
-  border-color: lightgray;
 `;
 
 const BetFeed = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const ErrorBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 800px;
-  height: 400px;
-`;
-
-const ErrorMessage = styled.div`
-  padding-top: 20px;
-  font-weight: bold;
-  font-size: 40px;
-  padding-bottom: 30px;
-`;
-
-const SupportLink = styled.div`
-  padding-right: 3px;
-  padding-left: 3px;
-  color: blue;
-  text-decoration: underline;
-`;
-
-const SupportMessage = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const LoadingBox = styled.div`
-  display: flex;
-  width: 800px;
-  height: 200px;
-  align-items: center;
-  justify-content: center;
 `;

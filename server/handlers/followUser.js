@@ -11,9 +11,9 @@ const options = {
 const followUser = async (req, res) => {
   try {
     const _id = req.params._id;
-    console.log(_id);
+
     const { user } = req.body;
-    console.log(req.body.user);
+    console.log(user);
 
     const client = new MongoClient(MONGO_URI, options);
 

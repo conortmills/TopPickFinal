@@ -35,10 +35,9 @@ export default createGlobalStyle`
   body {
       
       line-height: 1;
-      /* background-image: url("/ecomBackground.png");
-      
-      background-size: cover; */
-
+    
+      background-color: lightgreen;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
       
   }
   ol, ul {
